@@ -1,0 +1,186 @@
+<!DOCTYPE html>
+<html>
+<head>
+<link href='css/fullcalendar.css' rel='stylesheet' />
+<script src='js/jquery.min.js'></script>
+<script src='js/jquery-ui.custom.min.js'></script>
+<script src='js/moment.min.js'></script>
+<script src='js/fullcalendar.js'></script>
+<script src='js/en-gb.js'></script>
+<script>
+
+ var this_url = "http://fact-project.org/sandbox/dneise/shiftcalendar/";
+
+ $(document).ready(function() {
+
+   var username_choice = "";
+   var role_choice = "";
+
+   $("#username").append("<option>" + "dneise" + "</option>");
+   $("#username").append("<option>" + "sebmuel" + "</option>");
+   $("#username").append("<option>" + "mahnen" + "</option>");
+   $("#username").append("<option>" + "mnoethe" + "</option>");
+   
+   $("#role").append("<option>" + "1st shifter" + "</option>");
+   $("#role").append("<option>" + "2nd shifter" + "</option>");
+   $("#role").append("<option>" + "expert on call" + "</option>");
+   $("#role").append("<option>" + "fallback shifter" + "</option>");
+
+   var role_color = {
+     "1st shifter": "DarkRed",
+     "2nd shifter": "Green", 
+     "expert on call": "Red",
+     "fallback shifter": "LightSeaGreen",
+   }
+
+   $("#username").change(function() {
+      username_choice = $(this).val();
+   });
+   //$.each(vals, function(index, value) {
+        // $secondChoice.append("<option>" + value + "</option>");
+   //});
+
+   $("#role").change(function() {
+      role_choice = $(this).val();
+   });
+
+  var calendar = $('#calendar').fullCalendar({
+
+    views: {
+        agenda: {
+            // options apply to basicWeek and agendaWeek views 
+            slotDuration: "01:00:00",
+            minTime: "12:00:00",
+            maxTime: "1.12:00:00",
+            allDayText: "all night",
+        },
+    },
+
+    editable: true,
+    header: {
+      left: 'prev,next today',
+      center: 'title',
+      right: 'month,agendaWeek,agendaDay'
+    },
+
+   defaultTimedEventDuration: "06:00:00",
+   forceEventDuration: true,
+   
+   events: this_url + "events.php",
+  
+   eventDataTransform: function( event ) {
+      //alert(JSON.stringify(event));
+      event.color = role_color[event.role];
+      return event;
+   }, 
+   selectable: true,
+   selectHelper: true,
+   select: function(start, end) {
+       var title = username_choice;
+       var role = role_choice;
+       var url = "";
+       if (title) {
+           var allDay = false;
+           if (!start.hasTime() ){
+               allDay = true;
+           } 
+           var start = start.format();
+           var end = end.format();
+           $.ajax({
+               url: this_url + 'add_events.php',
+               data: 'title='+ title +'&start='+ start +'&end='+ end +'&url='+ url + '&role=' + role ,
+               type: "POST",
+               // success: function(json) { alert('Added Successfully'); },
+               // error:function(exception){alert('Exeption:'+exception);},
+           });
+           calendar.fullCalendar('renderEvent',
+		   {
+		       title: title,
+		       start: start,
+		       end: end,
+		       allDay: allDay,
+                       role: role,
+                       color: role_color[role],
+		   },
+		   true // make the event "stick"
+           );
+       }
+       calendar.fullCalendar('unselect');
+   },
+   
+   editable: true,
+
+   eventDrop: function(event, delta) {
+       // alert(JSON.stringify(event));
+       var start = event.start.format()
+       var end = event.end.format();
+       $.ajax({
+           url: this_url + 'update_events.php',
+           data: 'title='+ event.title+'&start='+ start +'&end='+ end +'&id='+ event.id ,
+           type: "POST",
+           // success: function(json) { alert("Updated Successfully"); }
+       });
+   },
+
+   eventResize: function(event) {
+       var start = event.start.format();
+       var end = event.end.format();
+       $.ajax({
+           url: this_url + 'update_events.php',
+           data: 'title='+ event.title+'&start='+ start +'&end='+ end +'&id='+ event.id ,
+           type: "POST",
+           // success: function(json) { alert("Updated Successfully"); }
+       });
+
+   },
+
+   eventClick: function(event) {
+       var decision = confirm("Would you like to delete this shifter?"); 
+       if (decision) {
+           $.ajax({
+               type: "POST",
+               url: this_url + "delete_event.php",
+               data: "&id=" + event.id
+           });
+
+           calendar.fullCalendar('removeEvents', event.id);
+       }
+       return false;
+   },
+
+});
+});
+
+</script>
+<style>
+
+ body {
+  margin-top: 40px;
+  text-align: center;
+  font-size: 14px;
+  font-family: "Lucida Grande",Helvetica,Arial,Verdana,sans-serif;
+
+  }
+
+
+ #calendar {
+  width: 900px;
+  margin: 0 auto;
+  }
+
+</style>
+</head>
+<body>
+<div id='calendar'></div>
+
+<select id="username">
+  <option>Please choose a username</option>
+</select>
+
+<select id="role">
+  <option>Please choose a role</option>
+</select>
+
+</body>
+</html>
+
