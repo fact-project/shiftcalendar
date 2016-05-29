@@ -17,23 +17,20 @@
    $.ajax({
            url: this_url + 'usernames.php',
            success: function(json) {
-            alert(JSON.stringify(json));
+               alert(JSON.stringify(json));
+                for(entry in json){
+                  $("#username").append("<option>" + entry["username"] + "</option>");
+                }
            }
        });
 
-   var username_choice = "";
-   var role_choice = "";
-
-   $("#username").append("<option>" + "dneise" + "</option>");
-   $("#username").append("<option>" + "sebmuel" + "</option>");
-   $("#username").append("<option>" + "mahnen" + "</option>");
-   $("#username").append("<option>" + "mnoethe" + "</option>");
-   
    $("#role").append("<option>" + "1st shifter" + "</option>");
    $("#role").append("<option>" + "2nd shifter" + "</option>");
    $("#role").append("<option>" + "expert on call" + "</option>");
    $("#role").append("<option>" + "fallback shifter" + "</option>");
 
+   var username_choice = "";
+   var role_choice = "";
    var role_color = {
      "1st shifter": "DarkRed",
      "2nd shifter": "Green", 
