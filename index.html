@@ -15,15 +15,16 @@
 
 
    $.ajax({
-           url: this_url + 'usernames.php',
-           success: function(json) {
-               alert(JSON.stringify(json));
-                for(entry in json){
-                  $("#username").append("<option>" + entry["username"] + "</option>");
-                }
-           }
+     url: this_url + 'usernames.php',
+     dataType: "json",
+     success: function(json) {
+       json.forEach(function(val, index){
+         $("#username").append("<option>" + val["username"] + "</option>");
        });
+     },
+   });
 
+   $("#role").empty();
    $("#role").append("<option>" + "1st shifter" + "</option>");
    $("#role").append("<option>" + "2nd shifter" + "</option>");
    $("#role").append("<option>" + "expert on call" + "</option>");
@@ -41,9 +42,6 @@
    $("#username").change(function() {
       username_choice = $(this).val();
    });
-   //$.each(vals, function(index, value) {
-        // $secondChoice.append("<option>" + value + "</option>");
-   //});
 
    $("#role").change(function() {
       role_choice = $(this).val();
