@@ -13,6 +13,14 @@
 
  $(document).ready(function() {
 
+
+   $.ajax({
+           url: this_url + 'usernames.php',
+           success: function(json) {
+            alert(JSON.stringify(json));
+           }
+       });
+
    var username_choice = "";
    var role_choice = "";
 
