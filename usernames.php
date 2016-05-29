@@ -9,7 +9,7 @@ require_once("/home/dneise/factread_db.php");
 
  // connection to the database
  try {
- $bdd = new PDO('mysql:host=localhost;dbname=factdata', $user, $pass);
+ $bdd = new PDO('mysql:host=10.0.100.21;dbname=factdata', $user, $pass);
  } catch(Exception $e) {
   exit('Unable to connect to database.');
  }
