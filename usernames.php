@@ -1,6 +1,8 @@
 <?php
 
 require_once("/home/dneise/factread_db.php");
+require_once('login.php');
+
 // List of events
  $json = array();
 
