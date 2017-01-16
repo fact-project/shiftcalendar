@@ -30,7 +30,7 @@
     var role_choice = "";
     var role_color = {
       "1st shifter": "DarkRed",
-      "2nd shifter": "Green", 
+      "2nd shifter": "Green",
       "expert on call": "Red",
       "fallback shifter": "LightSeaGreen",
     };
@@ -47,7 +47,7 @@
 
     views: {
       agenda: {
-        // options apply to basicWeek and agendaWeek views 
+        // options apply to basicWeek and agendaWeek views
         slotDuration: "01:00:00",
         minTime: "12:00:00",
         maxTime: "1.12:00:00",
@@ -61,7 +61,7 @@
     events: this_url + "events.php",
     selectable: true,
     selectHelper: true,
-    
+
     header: {
       left: 'prev,next today',
       center: 'title',
@@ -71,25 +71,24 @@
     eventDataTransform: function( event ) {
       event.color = role_color[event.role];
       return event;
-    }, 
-    
+    },
+
     select: function(start, end) {
       var title = username_choice;
       var role = role_choice;
-      var url = "";
       if (title) {
         var allDay = false;
         if (!start.hasTime() ){
           allDay = true;
-        } 
+        }
         var start = start.format();
         var end = end.format();
         $.ajax({
           url: this_url + 'add_events.php',
-          data: 'title='+ title +'&start='+ start +'&end='+ end +'&url='+ url + '&role=' + role ,
+          data: 'title='+ title +'&start='+ start +'&end='+ end +'&role=' + role ,
           type: "POST",
         });
-        
+
         calendar.fullCalendar(
           'renderEvent',
           {
@@ -105,7 +104,7 @@
       }
       calendar.fullCalendar('unselect');
     },
-   
+
     eventDrop: function(event, delta) {
       var start = event.start.format()
       var end = event.end.format();
@@ -127,7 +126,7 @@
     },
 
     eventClick: function(event) {
-      if (confirm("Would you like to delete this shifter?")) {
+      if (confirm("Would you like to delete this?")) {
         $.ajax({
           type: "POST",
           url: this_url + "delete_event.php",
@@ -148,7 +147,7 @@
     font-size: 14px;
     font-family: "Lucida Grande",Helvetica,Arial,Verdana,sans-serif;
   }
-  
+
   #calendar {
     width: 900px;
     margin: 0 auto;

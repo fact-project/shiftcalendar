@@ -7,7 +7,6 @@ require_once('login.php');
 $title = $_POST['title'];
 $start = $_POST['start'];
 $end = $_POST['end'];
-$url = $_POST['url'];
 $role = $_POST['role'];
 // connection to the database
 try {
@@ -17,8 +16,8 @@ exit('Unable to connect to database.');
 }
 
 // insert the records
-$sql = "INSERT INTO shift (title, start, end, url, role) VALUES (:title, :start, :end, :url, :role)";
+$sql = "INSERT INTO shift (title, start, end, role) VALUES (:title, :start, :end, :role)";
 $q = $bdd->prepare($sql);
-$q->execute(array(':title'=>$title, ':start'=>$start, ':end'=>$end, ':url'=>$url, ':role'=>$role));
+$q->execute(array(':title'=>$title, ':start'=>$start, ':end'=>$end, ':role'=>$role));
 ?>
 
