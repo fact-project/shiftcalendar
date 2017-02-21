@@ -22,15 +22,41 @@ class Role(Model):
     class Meta:
         database = sandbox
 
+    def __repr__(self):
+        return "{0}({1}, {2})".format(
+            self.__class__.__name__,
+            self.name,
+            self.title)
+
+
+
 
 class CalendarEntry(Model):
-    user = ForeignKeyField(Users)
+    user_id = IntegerField()
     role = ForeignKeyField(Role)
     start = DateField()
     end = DateField()
 
     class Meta:
         database = sandbox
+
+def setup_databases(drop=False):
+    '''
+    Initiliaze all tables in the databse
+    If drop is True, drop all tables before recreating them.
+    '''
+    tables = [Role, CalendarEntry]
+    if drop is True:
+        print('dropping bird poo')
+        sandbox.drop_tables(tables, cascade=True, safe=True)
+
+    sandbox.create_tables(tables, safe=True)
+
+    from . import roles
+    for name in dir(roles):
+        obj = getattr(roles, name)
+        if isinstance(obj, Role):
+            obj.save()
 
 class LegacyCalendarEntry(Model):
 
