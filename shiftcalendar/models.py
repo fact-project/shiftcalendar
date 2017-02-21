@@ -19,15 +19,17 @@ from .logbook_models import Users
 class Role(Model):
     name = CharField()
     title = CharField()
+    color = CharField()
 
     class Meta:
         database = sandbox
 
     def __repr__(self):
-        return "{0}({1}, {2})".format(
+        return "{0}({1}, {2}, {3})".format(
             self.__class__.__name__,
             self.name,
-            self.title)
+            self.title,
+            self.color)
 
 
 
