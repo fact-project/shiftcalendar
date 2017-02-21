@@ -1,23 +1,26 @@
 <?php
+    require_once('/home/dneise/sandbox_db.php');
+    require_once('login.php');
 
-require_once('/home/dneise/sandbox_db.php');
-require_once('login.php');
+    $title = $_POST['title'];
+    $start = $_POST['start'];
+    $end = $_POST['end'];
+    $role = $_POST['role'];
 
-// Values received via ajax
-$title = $_POST['title'];
-$start = $_POST['start'];
-$end = $_POST['end'];
-$role = $_POST['role'];
-// connection to the database
-try {
-$bdd = new PDO('mysql:host=localhost;dbname=sandbox', $user, $pass);
-} catch(Exception $e) {
-exit('Unable to connect to database.');
-}
+    try {
+        $db = new PDO('mysql:host=localhost;dbname=sandbox', $user, $pass);
+    } catch(Exception $e) {
+        exit('Unable to connect to database.');
+    }
 
-// insert the records
-$sql = "INSERT INTO shift (title, start, end, role) VALUES (:title, :start, :end, :role)";
-$q = $bdd->prepare($sql);
-$q->execute(array(':title'=>$title, ':start'=>$start, ':end'=>$end, ':role'=>$role));
+
+    $sql = "INSERT INTO shift (title, start, end, role) VALUES (:title, :start, :end, :role)";
+    $query = $db->prepare($sql);
+    $query->execute(
+        array(
+            ':title'=>$title,
+            ':start'=>$start,
+            ':end'=>$end,
+            ':role'=>$role)
+    );
 ?>
-
