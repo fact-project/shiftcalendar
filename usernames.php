@@ -4,8 +4,7 @@
 
 	$json = array();
 	$query = "SELECT username FROM logbook.users ORDER BY username";
-
-	$db = create_db('factdata')
+	$db = create_db('factdata');
 	$result = $db->query($query) or die(print_r($db->errorInfo()));
 	echo json_encode($result->fetchAll(PDO::FETCH_ASSOC));
 ?>
