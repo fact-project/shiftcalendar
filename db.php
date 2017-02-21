@@ -1,7 +1,7 @@
 <?php
     function create_db($dbname)
     {
-        require_once '/home/dneise/fact/php_credentials/all_dbs.php';
+        require '/home/dneise/fact/php_credentials/all_dbs.php';
         if (array_key_exists($dbname, $all_dbs))
         {
             $host = $all_dbs[$dbname]["host"];
