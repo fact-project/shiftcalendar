@@ -27,7 +27,7 @@ STARTER = Role(
 	)
 STOPPER = Role(
 	name='stopper',
-	title='performs the shutdown'
+	title='performs the shutdown',
 	color='PaleGreen',
 	)
 
