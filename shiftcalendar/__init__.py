@@ -2,7 +2,7 @@ from .models import  Role, CalendarEntry, LegacyCalendarEntry, setup_databases
 from .logbook_models import Users
 from .database import connect_databases, sandbox
 from . import roles
-from datetime import timedelta
+import datetime as dt
 from tqdm import tqdm
 def fill_CalendarEntry_from_Legacy():
 
@@ -26,8 +26,8 @@ def fill_CalendarEntry_from_Legacy():
                 print(e.u, 'not found ... skipping', e)
                 continue
 
-            shift_start = e.date + timedelta(hours=20)
-            shift_end = e.date + timedelta(hours=30)
+            shift_start = dt.datetime.combine(e.date, dt.time()) + dt.timedelta(hours=20)
+            shift_end = dt.datetime.combine(e.date, dt.time()) + dt.timedelta(hours=30)
 
             new_entry = CalendarEntry.create(
                 user_id=username2uid[e.u],
