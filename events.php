@@ -1,15 +1,9 @@
 <?php
-    require_once("/home/dneise/sandbox_db.php");
+    require_once("db.php");
     $json = array();
 
     $request = "SELECT * FROM shift ORDER BY id";
-
-    try {
-        $db = new PDO('mysql:host=localhost;dbname=sandbox', $user, $pass);
-    } catch(Exception $e) {
-        exit('Unable to connect to database.');
-    }
-
+    $db = create_db('sandbox');
     $result = $db->query($request) or die(print_r($db->errorInfo()));
     echo json_encode($result->fetchAll(PDO::FETCH_ASSOC));
 ?>
