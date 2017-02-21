@@ -23,25 +23,26 @@
       dataType: "json",
       success: function(json) {
         json.forEach(function(val, index){
-          $("#username").append("<option>" + val["username"] + "</option>");
+          $("#username").append("<option>" + val.username + "</option>");
         });
       },
     });
 
-    $("#role").empty();
-    $("#role").append("<option>" + "1st shifter" + "</option>");
-    $("#role").append("<option>" + "2nd shifter" + "</option>");
-    $("#role").append("<option>" + "expert on call" + "</option>");
-    $("#role").append("<option>" + "fallback shifter" + "</option>");
+    var role_color = {};
+
+    $.ajax({
+      url: this_url + 'roles.php',
+      dataType: "json",
+      success: function(json) {
+        json.forEach(function(val, index){
+          $("#role").append("<option>" + val.name + "</option>");
+          role_color[val.name] = val.color;
+        });
+      },
+    });
 
     var username_choice = "";
     var role_choice = "";
-    var role_color = {
-      "1st shifter": "DarkRed",
-      "2nd shifter": "Green",
-      "expert on call": "Red",
-      "fallback shifter": "LightSeaGreen",
-    };
 
     $("#username").change(function() {
       username_choice = $(this).val();
@@ -93,11 +94,11 @@
         if (!start.hasTime() ){
           allDay = true;
         }
-        var start = start.format();
-        var end = end.format();
+        var start_str = start.format();
+        var end_str = end.format();
         $.ajax({
           url: this_url + 'add_events.php',
-          data: 'title='+ title +'&start='+ start +'&end='+ end +'&role=' + role ,
+          data: 'title='+ title +'&start='+ start_str +'&end='+ end_str +'&role=' + role ,
           type: "POST",
         });
 
@@ -105,8 +106,8 @@
           'renderEvent',
           {
             title: title,
-            start: start,
-            end: end,
+            start: start_str,
+            end: end_str,
             allDay: allDay,
             role: role,
             color: role_color[role],
