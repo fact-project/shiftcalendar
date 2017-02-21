@@ -1,10 +1,10 @@
 <?php
-	require_once("db.php");
-	require_once('login.php');
+    require_once("db.php");
+    require_once('login.php');
 
-	$json = array();
-	$query = "SELECT username FROM logbook.users ORDER BY username";
-	$db = create_db('factdata');
-	$result = $db->query($query) or die(print_r($db->errorInfo()));
-	echo json_encode($result->fetchAll(PDO::FETCH_ASSOC));
+    $json = array();
+    $query = "SELECT username FROM logbook.users ORDER BY username";
+    $db = create_db('factdata');
+    $result = $db->query($query) or die(print_r($db->errorInfo()));
+    echo json_encode($result->fetchAll(PDO::FETCH_ASSOC));
 ?>
