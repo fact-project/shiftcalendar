@@ -9,6 +9,7 @@ from peewee import (
     TextField,
     MySQLDatabase,
     DateField,
+    DateTimeField,
     CompositeKey
 )
 
@@ -34,8 +35,8 @@ class Role(Model):
 class CalendarEntry(Model):
     user_id = IntegerField()
     role = ForeignKeyField(Role)
-    start = DateField()
-    end = DateField()
+    start = DateTimeField()
+    end = DateTimeField()
 
     class Meta:
         database = sandbox
