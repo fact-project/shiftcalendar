@@ -1,5 +1,5 @@
 <?php
-    require_once('/home/dneise/sandbox_db.php');
+    require_once('db.php');
     require_once('login.php');
 
     $title = $_POST['title'];
@@ -7,13 +7,7 @@
     $end = $_POST['end'];
     $role = $_POST['role'];
 
-    try {
-        $db = new PDO('mysql:host=localhost;dbname=sandbox', $user, $pass);
-    } catch(Exception $e) {
-        exit('Unable to connect to database.');
-    }
-
-
+    $db = create_db('sandbox');
     $sql = "INSERT INTO shift (title, start, end, role) VALUES (:title, :start, :end, :role)";
     $query = $db->prepare($sql);
     $query->execute(
