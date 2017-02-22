@@ -2,19 +2,20 @@
     require_once('db.php');
     require_once('login.php');
 
-    $title = $_POST['title'];
+    $user_id = $_POST['user_id'];
+    $role_id = $_POST['role_id'];
     $start = $_POST['start'];
     $end = $_POST['end'];
-    $role = $_POST['role'];
 
     $db = create_db('sandbox');
-    $sql = "INSERT INTO shift (title, start, end, role) VALUES (:title, :start, :end, :role)";
+    $sql = "INSERT INTO calendarentry (user_id, role_id, start, end) VALUES (:user_id, :role_id, :start, :end)";
     $query = $db->prepare($sql);
     $query->execute(
         array(
-            ':title'=>$title,
+            ':user_id'=>$user_id,
+            ':role_id'=>$role_id,
             ':start'=>$start,
-            ':end'=>$end,
-            ':role'=>$role)
+            ':end'=>$end
+        )
     );
 ?>

@@ -18,38 +18,43 @@
 <script>
   var this_url = "http://fact-project.org/sandbox/dneise/shiftcalendar/";
   $(document).ready(function() {
+    var role_color = {};
+    var username = {};
+    var rolename = {};
     $.ajax({
       url: this_url + 'usernames.php',
       dataType: "json",
       success: function(json) {
         json.forEach(function(val, index){
-          $("#username").append("<option>" + val.username + "</option>");
+          username[val.user_id] = val.username;
+          $("#username").append('<option value="' + val.user_id +'">' + val.username + "</option>");
         });
       },
     });
 
-    var role_color = {};
+
 
     $.ajax({
       url: this_url + 'roles.php',
       dataType: "json",
       success: function(json) {
         json.forEach(function(val, index){
-          $("#role").append("<option>" + val.name + "</option>");
-          role_color[val.name] = val.color;
+          role_color[val.id] = val.color;
+          rolename[val.id] = val.name;
+          $("#role").append('<option value="' + val.id +'">' + val.name + "</option>");
         });
       },
     });
 
-    var username_choice = "";
-    var role_choice = "";
+    var user_id_choice = "";
+    var role_id_choice = "";
 
     $("#username").change(function() {
-      username_choice = $(this).val();
+      user_id_choice = $(this).val();
     });
 
     $("#role").change(function() {
-      role_choice = $(this).val();
+      role_id_choice = $(this).val();
     });
 
     var calendar = $('#calendar').fullCalendar({
@@ -87,9 +92,7 @@
     },
 
     select: function(start, end) {
-      var title = username_choice;
-      var role = role_choice;
-      if (title) {
+      if (user_id_choice) {
         var allDay = false;
         if (!start.hasTime() ){
           allDay = true;
@@ -98,19 +101,19 @@
         var end_str = end.format();
         $.ajax({
           url: this_url + 'add_events.php',
-          data: 'title='+ title +'&start='+ start_str +'&end='+ end_str +'&role=' + role ,
+          data: 'user_id=' + user_id_choice + '&start=' + start_str + '&end=' + end_str +'&role_id=' + role_id_choice ,
           type: "POST",
         });
 
         calendar.fullCalendar(
           'renderEvent',
           {
-            title: title,
+            title: username[user_id_choice],
             start: start_str,
             end: end_str,
             allDay: allDay,
-            role: role,
-            color: role_color[role],
+            role: rolename[role_id_choice],
+            color: role_color[role_id_choice],
           },
           true // make the event "stick"
         );
