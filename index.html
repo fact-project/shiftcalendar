@@ -126,7 +126,7 @@
       var end = event.end.format();
       $.ajax({
         url: this_url + 'update_events.php',
-        data: 'title='+ event.title+'&start='+ start +'&end='+ end +'&id='+ event.id ,
+        data: 'start='+ start +'&end='+ end +'&id='+ event.id ,
         type: "POST",
       });
     },
@@ -136,7 +136,7 @@
       var end = event.end.format();
       $.ajax({
         url: this_url + 'update_events.php',
-        data: 'title='+ event.title+'&start='+ start +'&end='+ end +'&id='+ event.id ,
+        data: 'start='+ start +'&end='+ end +'&id='+ event.id ,
         type: "POST",
       });
     },
