@@ -146,7 +146,7 @@
         $.ajax({
           type: "POST",
           url: this_url + "delete_event.php",
-          data: "&id=" + event.id
+          data: "id=" + event.id
         });
         calendar.fullCalendar('removeEvents', event.id);
       }
