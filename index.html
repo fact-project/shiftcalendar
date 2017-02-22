@@ -130,6 +130,7 @@
         );
       }
       calendar.fullCalendar('unselect');
+      calendar.fullcalendar('rerenderEvents');
     },
 
     eventDrop: function(event, delta) {
@@ -160,6 +161,7 @@
           data: "id=" + event.id
         });
         calendar.fullCalendar('removeEvents', event.id);
+        calendar.fullcalendar('rerenderEvents');
       }
       return false;
     },
@@ -193,6 +195,10 @@
   <option>Please choose a role</option>
 </select>
 
+comments or remarks:
+<a href="https://github.com/fact-project/shiftcalendar">
+  github.com/fact-project/shiftcalendar
+</a>
 </body>
 </html>
 
