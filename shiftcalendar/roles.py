@@ -1,13 +1,13 @@
 from .models import Role
 
 LEGACY_SHIFTER = Role(
-	name='legacy_shifter',
-	title='the pre 2017 standard shifter',
+	name='shifter',
+	title='pre 2017 standard shifter',
 	color="DarkRed"
 	)
 LEGACY_EXPERT = Role(
-	name='legacy_expert',
-	title='the pre 2017 standard expert',
+	name='debug_shift',
+	title='pre 2017 standard debug shift',
 	color="Green",
 	)
 FALLBACK_SHIFTER = Role(
