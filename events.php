@@ -2,6 +2,10 @@
     require_once("db.php");
     $json = array();
 
+    $start = $_GET['start'];
+    $end = $_GET['end'];
+
+
     $db = create_db('factdata');
     $request = "SELECT username, uid FROM logbook.users";
     $result = $db->query($request) or die(print_r($db->errorInfo()));
@@ -13,7 +17,7 @@
         $uid2name[$u['uid']] = $u['username'];
     }
 
-    $request = "SELECT calendarentry.id, calendarentry.user_id, start, end, role.id as role_id from calendarentry join role on (calendarentry.role_id = role.id)";
+    $request = 'SELECT calendarentry.id, calendarentry.user_id, start, end, role.id as role_id from calendarentry join role on (calendarentry.role_id = role.id) where start>="'.$start.'" and end<="'.$end.'"';
     $db = create_db('sandbox');
     $result = $db->query($request) or die(print_r($db->errorInfo()));
     $calendarentries = $result->fetchAll(PDO::FETCH_ASSOC);
