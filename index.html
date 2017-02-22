@@ -105,11 +105,11 @@
       if (user_id_choice) {
         var allDay = false;
         if (role_id_choice in role_start_offsets){
-          start += role_start_offsets[role_id_choice];
-          end = start + role_default_durations[role_id_choice];
+          start = moment(start).add(role_start_offsets[role_id_choice]);
+          end = moment(start).add(role_default_durations[role_id_choice]);
         }
-        var start_str = start.format();
-        var end_str = end.format();
+        var start_str = start.format("YYYY-MM-DD HH:mm:ss");
+        var end_str = end.format("YYYY-MM-DD HH:mm:ss");
         $.ajax({
           url: this_url + 'add_events.php',
           data: 'user_id=' + user_id_choice + '&start=' + start_str + '&end=' + end_str +'&role_id=' + role_id_choice ,
