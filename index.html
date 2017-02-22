@@ -83,12 +83,12 @@
     },
 
     eventDataTransform: function( event ) {
-      event.color = role_color[event.role];
+      event.color = role_color[event.role_id];
       return event;
     },
 
     eventRender: function(event, element) {
-      $(element).tooltip({title: event.role});
+      $(element).tooltip({title: rolename[event.role_id]});
     },
 
     select: function(start, end) {

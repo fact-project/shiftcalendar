@@ -12,8 +12,8 @@
         $user2id[$u['username']] = $u['uid'];
         $uid2name[$u['uid']] = $u['username'];
     }
-   
-    $request = "SELECT calendarentry.id, calendarentry.user_id, start, end, name as role from calendarentry join role on (calendarentry.role_id = role.id)";
+
+    $request = "SELECT calendarentry.id, calendarentry.user_id, start, end, role.id as role_id from calendarentry join role on (calendarentry.role_id = role.id)";
     $db = create_db('sandbox');
     $result = $db->query($request) or die(print_r($db->errorInfo()));
     $calendarentries = $result->fetchAll(PDO::FETCH_ASSOC);
@@ -28,7 +28,7 @@
             "end" => $c['end'],
             "url" => "",
             "allDay" => 0,
-            "role" => $c['role']
+            "role_id" => $c['role_id']
         ];
         $entries[] = $e;
     }
