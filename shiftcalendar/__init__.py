@@ -27,7 +27,7 @@ def fill_CalendarEntry_from_Legacy():
                 continue
 
             shift_start = dt.datetime.combine(e.date, dt.time()) + dt.timedelta(hours=20)
-            shift_end = dt.datetime.combine(e.date, dt.time()) + dt.timedelta(hours=30)
+            shift_end = dt.datetime.combine(e.date, dt.time()) + dt.timedelta(hours=20+10 if not e.x else 20+5)
 
             new_entry = CalendarEntry.create(
                 user_id=username2uid[e.u],
