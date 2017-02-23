@@ -89,7 +89,7 @@
     header: {
       left: 'prev,next today',
       center: 'title',
-      right: 'month,agendaWeek,agendaDay'
+      right: 'month'
     },
 
     eventDataTransform: function( event ) {
@@ -102,24 +102,46 @@
         $(element).tooltip({title: rolename[event.role_id]});
         $(element).find('.fc-event').addClass(event.className.join(' '));
     },
- 
+
 
     select: function(start, end) {
       if (user_id_choice) {
-        var allDay = false;
-        if (role_id_choice in role_start_offsets){
-          start = moment(start).add(role_start_offsets[role_id_choice]);
-          end = moment(start).add(role_default_durations[role_id_choice]);
+        var start_str;
+        var end_str;
+        if (role_id_choice in role_start_offsets)
+        {
+          for (days = 0; days < end.diff(start, 'days'); days+=1)
+          {
+            start_str = moment(start)
+              .add(days, 'days')
+              .add(role_start_offsets[role_id_choice])
+              .format("YYYY-MM-DD HH:mm:ss");
+            end_str = moment(start)
+              .add(days, 'days')
+              .add(role_start_offsets[role_id_choice])
+              .add(role_default_durations[role_id_choice])
+              .format("YYYY-MM-DD HH:mm:ss");
+            $.ajax({
+              url: this_url + 'add_events.php',
+              data: {
+                  user_id: user_id_choice,
+                  role_id: role_id_choice ,
+                  start: start_str,
+                  end: end_str,
+              },
+              type: "POST",
+            });
+          }
         }
-        var start_str = start.format("YYYY-MM-DD HH:mm:ss");
-        var end_str = end.format("YYYY-MM-DD HH:mm:ss");
+        start_str = start.format("YYYY-MM-DD HH:mm:ss");
+        end_str = end.format("YYYY-MM-DD HH:mm:ss");
         $.ajax({
           url: this_url + 'add_events.php',
           data: {
-              user_id: user_id_choice, 
+              user_id: user_id_choice,
               role_id: role_id_choice ,
-              start: start_str, 
-              end: end_str, 
+              start: start_str,
+              end: end_str,
           },
           type: "POST",
         });
