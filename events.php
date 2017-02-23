@@ -1,20 +1,13 @@
 <?php
     require_once("db.php");
-    $json = array();
-
+    require_once("username_userid_maps.php");
     $start = $_GET['start'];
+    if (!$start) {
+        $start="2011-01-01";
+    }
     $end = $_GET['end'];
-
-
-    $db = create_db('factdata');
-    $request = "SELECT username, uid FROM logbook.users";
-    $result = $db->query($request) or die(print_r($db->errorInfo()));
-    $user2id = array();
-    $uid2name = array();
-    foreach($result->fetchAll(PDO::FETCH_ASSOC) as $u)
-    {
-        $user2id[$u['username']] = $u['uid'];
-        $uid2name[$u['uid']] = $u['username'];
+    if (!$end) {
+       $end = "2100-01-01";
     }
 
     $request = 'SELECT calendarentry.id, calendarentry.user_id, start, end, role.id as role_id from calendarentry join role on (calendarentry.role_id = role.id) where start>="'.$start.'" and end<="'.$end.'"';
@@ -22,19 +15,11 @@
     $result = $db->query($request) or die(print_r($db->errorInfo()));
     $calendarentries = $result->fetchAll(PDO::FETCH_ASSOC);
 
-    $entries = array();
-    foreach($calendarentries as $c)
+    foreach($calendarentries as &$c)
     {
-        $e = [
-            "id" => $c['id'],
-            "title" => $uid2name[$c['user_id']],
-            "start" => $c['start'],
-            "end" => $c['end'],
-            "url" => "",
-            "allDay" => 0,
-            "role_id" => $c['role_id']
-        ];
-        $entries[] = $e;
+        $c["url"] = "";
+        $c["allDay"] = 0;
+        $c["title"] = $uid2name[$c['user_id']];
     }
-    echo json_encode($entries);
+    echo json_encode($calendarentries);
 ?>
