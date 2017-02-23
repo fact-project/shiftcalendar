@@ -20,21 +20,24 @@ def fill_CalendarEntry_from_Legacy():
     username2uid = {u['username']:u['uid'] for u in users}
     uid2username = {u['uid']:u['username'] for u in users}
 
+    new_entries = []
+    for e in old_entries:
+        if not e.u in username2uid:
+            continue
+
+        shift_start = dt.datetime.combine(e.date, dt.time()) + dt.timedelta(hours=20)
+        shift_end = dt.datetime.combine(e.date, dt.time()) + dt.timedelta(hours=20+10 if not e.x else 20+5)
+
+        new_entry = dict(
+            user_id=username2uid[e.u],
+            role=roles.LEGACY_SHIFTER if not e.x else roles.LEGACY_EXPERT,
+            start=shift_start,
+            end=shift_end,
+        )
+        new_entries.append(new_entry)
+
     with sandbox.atomic():
-        for e in tqdm(old_entries):
-            if not e.u in username2uid:
-                print(e.u, 'not found ... skipping', e)
-                continue
-
-            shift_start = dt.datetime.combine(e.date, dt.time()) + dt.timedelta(hours=20)
-            shift_end = dt.datetime.combine(e.date, dt.time()) + dt.timedelta(hours=20+10 if not e.x else 20+5)
-
-            new_entry = CalendarEntry.create(
-                user_id=username2uid[e.u],
-                role=roles.LEGACY_SHIFTER if not e.x else roles.LEGACY_EXPERT,
-                start=shift_start,
-                end=shift_end,
-            )
+        CalendarEntry.insert_many(new_entries).execute()
 
 connect_databases()
 setup_databases(drop=True)
