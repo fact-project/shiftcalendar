@@ -115,7 +115,12 @@
         var end_str = end.format("YYYY-MM-DD HH:mm:ss");
         $.ajax({
           url: this_url + 'add_events.php',
-          data: 'user_id=' + user_id_choice + '&start=' + start_str + '&end=' + end_str +'&role_id=' + role_id_choice ,
+          data: {
+              user_id: user_id_choice, 
+              role_id: role_id_choice ,
+              start: start_str, 
+              end: end_str, 
+          },
           type: "POST",
         });
 
