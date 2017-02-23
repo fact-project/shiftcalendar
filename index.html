@@ -48,7 +48,7 @@
     var role_start_offsets = {
       5: moment.duration(18, 'hours'),  // 5: starter: 18h - 22h
       4: moment.duration(22, 'hours'),  // 4: shifter on call: 22h - 6am  (8 hours)
-      6: moment.duration(24+6, 'hours'),  // 6: stopper: 6h am - 8h am (next day)
+      6: moment.duration(6, 'hours'),  // 6: stopper: 6h am - 8h am (next day)
     };
     var role_default_durations = {
       5: moment.duration(4, 'hours'),
@@ -97,9 +97,12 @@
       return event;
     },
 
-    eventRender: function(event, element) {
-      $(element).tooltip({title: rolename[event.role_id]});
+    eventRender:
+    function (event, element, view) {
+        $(element).tooltip({title: rolename[event.role_id]});
+        $(element).find('.fc-event').addClass(event.className.join(' '));
     },
+ 
 
     select: function(start, end) {
       if (user_id_choice) {
@@ -116,21 +119,9 @@
           type: "POST",
         });
 
-        calendar.fullCalendar(
-          'renderEvent',
-          {
-            title: username[user_id_choice],
-            start: start_str,
-            end: end_str,
-            allDay: allDay,
-            role: rolename[role_id_choice],
-            color: role_color[role_id_choice],
-          },
-          true // make the event "stick"
-        );
+        calendar.fullCalendar('unselect');
+        calendar.fullCalendar('refetchEvents');
       }
-      calendar.fullCalendar('unselect');
-      calendar.fullcalendar('rerenderEvents');
     },
 
     eventDrop: function(event, delta) {
@@ -161,7 +152,6 @@
           data: "id=" + event.id
         });
         calendar.fullCalendar('removeEvents', event.id);
-        calendar.fullcalendar('rerenderEvents');
       }
       return false;
     },
