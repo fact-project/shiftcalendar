@@ -32,9 +32,6 @@ class Role(Model):
             self.title,
             self.color)
 
-
-
-
 class CalendarEntry(Model):
     user_id = IntegerField()
     role = ForeignKeyField(Role)
@@ -56,11 +53,9 @@ def setup_databases(drop=False):
 
     sandbox.create_tables(tables, safe=True)
 
-    from . import roles
-    for name in dir(roles):
-        obj = getattr(roles, name)
-        if isinstance(obj, Role):
-            obj.save()
+    from .roles import all_roles
+    for r in all_roles:
+        r.save()
 
 class LegacyCalendarEntry(Model):
 

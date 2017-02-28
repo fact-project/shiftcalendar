@@ -55,3 +55,14 @@ DEBUG_SHIFT = Role(
     color="Green",
     active=False,
     )
+
+all_roles = [
+    STARTER,
+    SHIFTER,
+    PARKER,
+    FALLBACK_SHIFTER,
+    FLARE_EXPERT,
+    FALLBACK_FLARE_EXPERT,
+    SHIFTER_AWAKE,
+    DEBUG_SHIFT,
+]
