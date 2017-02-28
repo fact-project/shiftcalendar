@@ -37,11 +37,6 @@ def end_of_shift(dt):
 
 def fill_CalendarEntry_from_Legacy():
 
-    old_entries = sorted(
-        list(LegacyCalendarEntry.select()),
-        key=lambda entry: entry.date
-    )
-
     users = list(
         Users.select(Users.username, Users.uid)
         .dicts()
@@ -50,29 +45,61 @@ def fill_CalendarEntry_from_Legacy():
     username2uid = {u['username']:u['uid'] for u in users}
     uid2username = {u['uid']:u['username'] for u in users}
 
+
+    old_entries = sorted(
+        list(LegacyCalendarEntry.select()),
+        key=lambda entry: entry.date
+    )
+
+    # get rid of non-personal entries like "ETHZ" and "TUDO"
+    old_entries = [e for e in old_entries if e.u in username2uid]
+
+    debug_shift_entries = [oe for oe in old_entries if oe.x]
+    normal_shift_entries = [oe for oe in old_entries if not oe.x]
+
+    normal_shift_entries_by_date = []
+    last_date = None
+    for e in normal_shift_entries:
+        if e.date != last_date:
+            last_date = e.date
+            normal_shift_entries_by_date.append([])
+        normal_shift_entries_by_date[-1].append(e)
+
+
+
     new_entries = []
-    for e in old_entries:
-        if not e.u in username2uid:
-            continue
+    for e in debug_shift_entries:
 
         shift_start = start_of_shift(e.date)
         shift_end = end_of_shift(e.date)
-
-        if not e.x:
-            role = roles.SHIFTER_AWAKE
-        else:
-            role = roles.DEBUG_SHIFT
-            shift_end = shift_start + (shift_end - shift_start)/2.;
+        # debug shift is only half as long
+        shift_end = shift_start + (shift_end - shift_start)/2.;
 
         new_entries.append(dict(
             user_id=username2uid[e.u],
-            role=role,
+            role=roles.DEBUG_SHIFT,
             start=shift_start,
             end=shift_end,
         ))
 
+    for group in normal_shift_entries_by_date:
+        shift_start = start_of_shift(group[0].date)
+        shift_end = end_of_shift(group[0].date)
+        shift_duration = shift_end - shift_start
+        part_duration = shift_duration / len(group)
+
+        for i, e in enumerate(group):
+            part_start = shift_start + i * part_duration
+            new_entries.append(dict(
+                user_id=username2uid[e.u],
+                role=roles.SHIFTER_AWAKE,
+                start=part_start,
+                end=part_start + part_duration,
+            ))
+
     with sandbox.atomic():
         CalendarEntry.insert_many(new_entries).execute()
+
 
 connect_databases()
 setup_databases(drop=True)
