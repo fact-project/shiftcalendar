@@ -46,14 +46,14 @@
 
     // DN: this is shit! should maybe come from DB, or ... idk
     var role_start_offsets = {
-      5: moment.duration(18, 'hours'),  // 5: starter: 18h - 22h
-      4: moment.duration(22, 'hours'),  // 4: shifter on call: 22h - 6am  (8 hours)
-      6: moment.duration(6, 'hours'),  // 6: stopper: 6h am - 8h am (next day)
+      1: moment.duration(18, 'hours'),  // starter: 18h - 22h
+      2: moment.duration(22, 'hours'),  // shifter on call: 22h - 6am  (8 hours)
+      3: moment.duration(6, 'hours'),  // stopper: 6h am - 8h am (next day)
     };
     var role_default_durations = {
-      5: moment.duration(4, 'hours'),
-      6: moment.duration(2, 'hours'),
-      4: moment.duration(8, 'hours'),
+      1: moment.duration(4, 'hours'),
+      3: moment.duration(2, 'hours'),
+      2: moment.duration(8, 'hours'),
     };
 
     var user_id_choice = "";
@@ -99,7 +99,7 @@
 
     eventRender:
     function (event, element, view) {
-        $(element).tooltip({title: rolename[event.role_id]});
+        $(element).tooltip({title: rolename[event.role_id] + " -" + event.end.format('HH:mm')});
         $(element).find('.fc-event').addClass(event.className.join(' '));
     },
 
