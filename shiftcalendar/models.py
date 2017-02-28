@@ -20,6 +20,7 @@ class Role(Model):
     name = CharField()
     title = CharField()
     color = CharField()
+    active = BooleanField(help_text="true, if this Role can be chosen in the webinterface.")
 
     class Meta:
         database = sandbox
@@ -30,9 +31,6 @@ class Role(Model):
             self.name,
             self.title,
             self.color)
-
-
-
 
 class CalendarEntry(Model):
     user_id = IntegerField()
@@ -50,16 +48,14 @@ def setup_databases(drop=False):
     '''
     tables = [Role, CalendarEntry]
     if drop is True:
-        print('dropping bird poo')
+        print('dropping existing tables')
         sandbox.drop_tables(tables, cascade=True, safe=True)
 
     sandbox.create_tables(tables, safe=True)
 
-    from . import roles
-    for name in dir(roles):
-        obj = getattr(roles, name)
-        if isinstance(obj, Role):
-            obj.save()
+    from .roles import all_roles
+    for r in all_roles:
+        r.save()
 
 class LegacyCalendarEntry(Model):
 
