@@ -72,10 +72,10 @@
     views: {
       agenda: {
         // options apply to basicWeek and agendaWeek views
-        slotDuration: "01:00:00",
+        slotDuration: "00:30:00",
         minTime: "00:00:00",
         maxTime: "1.00:00:00",
-        allDayText: "all night",
+        allDaySlot: false,
       },
     },
 
@@ -89,7 +89,7 @@
     header: {
       left: 'prev,next today',
       center: 'title',
-      right: 'month'
+      right: 'month agendaWeek'
     },
 
     eventDataTransform: function( event ) {
