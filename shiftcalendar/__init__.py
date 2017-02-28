@@ -101,6 +101,7 @@ def fill_CalendarEntry_from_Legacy():
         CalendarEntry.insert_many(new_entries).execute()
 
 
-connect_databases()
-setup_databases(drop=True)
-fill_CalendarEntry_from_Legacy()
+def fill_legacy():
+    connect_databases()
+    setup_databases(drop=True)
+    fill_CalendarEntry_from_Legacy()
