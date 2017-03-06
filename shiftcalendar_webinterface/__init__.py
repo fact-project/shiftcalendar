@@ -11,6 +11,8 @@ from twilio.rest import TwilioRestClient
 from twilio.exceptions import TwilioException
 import peewee
 
+from shiftcalendar.database import connect_databases
+from shiftcalendar.models import Role, CalendarEntry, LegacyCalendarEntry
 
 app = Flask(__name__)
 
@@ -25,10 +27,7 @@ def init_db():
 
 @app.before_request
 def _db_connect():
-    pass
-    """
-    database.connect()
-    """
+    connect_databases()
 
 @app.teardown_request
 def _db_close(exc):
@@ -42,6 +41,9 @@ def index():
     return render_template('index.html')
 
 
+@app.route('/roles')
+def get_roles():
+    return json.dumps(list(Role.select().dicts()))
 """
 def remove_alert(uuid):
     (
