@@ -1,4 +1,5 @@
-from .models import  Role, CalendarEntry, LegacyCalendarEntry, setup_databases
+from .models import  Role, CalendarEntry, LegacyCalendarEntry, MoonBreak
+from .models import setup_databases
 from .logbook_models import Users
 from .database import connect_databases, sandbox
 from . import roles
@@ -101,7 +102,22 @@ def fill_CalendarEntry_from_Legacy():
         CalendarEntry.insert_many(new_entries).execute()
 
 
+def fill_MoonBreak_from_Legacy():
+
+    old_entries = sorted(
+        list(LegacyCalendarEntry.select()),
+        key=lambda entry: entry.date
+    )
+
+    old_moon_breaks = [e for e in old_entries if e.u=='moon']
+    new_entries = [{'date':e.date} for e in old_moon_breaks]
+
+    with sandbox.atomic():
+        MoonBreak.insert_many(new_entries).execute()
+
+
 def fill_legacy():
     connect_databases()
     setup_databases(drop=True)
     fill_CalendarEntry_from_Legacy()
+    fill_MoonBreak_from_Legacy()
