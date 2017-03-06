@@ -92,6 +92,15 @@ def get_events():
         d['title'] = uid2name[d['user_id']]
     return jsonify(l)
 
+@app.route('/delete_event', methods=["POST"])
+@login_required
+def delete_event():
+    CalendarEntry.delete().where(
+        CalendarEntry.id==int(request.form['id'])
+    ).execute()
+    return redirect('/')
+
+
 @app.route('/login', methods=['GET', 'POST'])
 def login():
 
@@ -115,6 +124,8 @@ def login():
 def logout():
     logout_user()
     return redirect('/')
+
+
 
 """
 def remove_alert(uuid):
