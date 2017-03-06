@@ -1,0 +1,52 @@
+<!DOCTYPE html>
+<html>
+  {% include 'head.html' %}
+  <body>
+    <header>
+      <nav class="navbar navbar-default">
+        <div class="container-fluid">
+          <div class="navbar-header">
+            <button type="button" class="navbar-toggle collapsed" data-toggle="collapse" data-target="#bs-example-navbar-collapse-1" aria-expanded="false">
+              <span class="sr-only">Toggle navigation</span>
+              <span class="icon-bar"></span>
+              <span class="icon-bar"></span>
+              <span class="icon-bar"></span>
+            </button>
+            <a class="navbar-brand" href="/">Home</a>
+          </div>
+          <div class="collapse navbar-collapse" id="bs-example-navbar-collapse-1">
+            <ul class="nav navbar-nav">
+              <li class="disabled"><a href="#">Test Call</a></li>
+              <li class="disabled"><a href="#">Test Telegram</a></li>
+              <li class="disabled"><a href="#">I am awake</a></li>
+            </ul>
+            <form method="POST" action="/login" class="navbar-form">
+              <div class="form-group">
+                <input id="username" class="form-control" name="username" type="text" value placeholder="username">
+                <input id="password" class="form-control" name="password" type="password" value placeholder="password">
+              </div>
+              <button type="submit" class="btn btn-default">Login</button>
+            </form>
+          </div>
+        </div>
+      </nav>
+      <h1>FACT ShiftHelper Webinterface</h1>
+    </header>
+    <div class="content">
+      {% with messages = get_flashed_messages(with_categories=True) %}
+        {% if messages %}
+          {% for category, message in messages %}
+          <div class="alert {{ category }} alert-dismissible" style="width: 80%; margin-left: 10%;">
+            <button type="button" class="close" data-dismiss="alert" aria-hidden="true">
+              &times;
+            </button>
+            <strong>{{ message }}</strong>
+          </div>
+          {% endfor %}
+        {% endif %}
+      {% endwith %}
+      {% block content %}
+      {% endblock %}
+    </div>
+  </body>
+</html>
