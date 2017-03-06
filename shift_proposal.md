@@ -127,15 +127,19 @@ This can be done e.g. by not storing what we want to **have** in the shiftcalend
 
 If we fear, people might screw up the shiftcalendar all the time, because they can. We can of course forbid them to alter entries and just alow this to a handful of people. And in case somebody needs to swap shifts, they have to call (what ever time it might be) one of these people. Still these people might screw it up then, but obviously this is okay then, because these people are somehow special.
 
-### Typical load on shifters per week
+### Typical load per type
 
+number of calls per week
 
-Parker: 4 +- 6 calls per week. Median=2
-Starter: 12 +- 12 calls per week. Median=9
-Shifter: 23 +- 30 calls per week. Median=16
+| shift | mean | std | median |
+| --- | --- | --- | ---
+| Starter | 4 | 6 | 2 |
+| Shifter | 23 | 30 | 16 |
+| Parker | 12 | 12 | 9 |
 
 16 calls per week for a sleeping shifter is a lot. However this
 statistic includes calls to developers as well as "duplicate" calls, i.e. a call that is going out
 5minutes or 2minutes after another call, so the shifter is not woken up twice.
 
 The median time between two calls is with 2.2minutes fairly close to the minimum time of 2minutes, which shows how difficult it is to interpret these numbers.
+
