@@ -13,6 +13,7 @@ import peewee
 
 from shiftcalendar.database import connect_databases
 from shiftcalendar.models import Role, CalendarEntry, LegacyCalendarEntry
+from shiftcalendar.logbook_models import Users
 
 app = Flask(__name__)
 
@@ -44,6 +45,15 @@ def index():
 @app.route('/roles')
 def get_roles():
     return json.dumps(list(Role.select().dicts()))
+
+@app.route('/usernames')
+def get_usernames():
+    q = Users.select(Users.username, Users.uid).dicts()
+    l = [d for d in q]
+    for d in l:
+        d['user_id'] = d.pop('uid')
+    return json.dumps(l)
+
 """
 def remove_alert(uuid):
     (
