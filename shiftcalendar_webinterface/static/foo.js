@@ -8,7 +8,6 @@ $(document).ready(function() {
       success: function(json) {
         json.forEach(function(val, index){
           username[val.user_id] = val.username;
-          $("#username").append('<option value="' + val.user_id +'">' + val.username + "</option>");
         });
       },
     });
@@ -20,7 +19,6 @@ $(document).ready(function() {
         json.forEach(function(val, index){
           role_color[val.id] = val.color;
           rolename[val.id] = val.name;
-          $("#role").append('<option value="' + val.id +'">' + val.name + "</option>");
         });
       },
     });

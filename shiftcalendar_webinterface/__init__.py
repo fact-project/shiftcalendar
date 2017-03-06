@@ -26,14 +26,19 @@ login_manager.init_app(app)
 
 user2id = {}
 uid2name = {}
+usernames_dict_list = None
+roles_dict_list = None
 
 @app.before_first_request
 def init_db():
     connect_databases()
-    q = Users.select(Users.username, Users.uid)
-    for d in q:
+    global usernames_dict_list
+    usernames_dict_list = Users.select(Users.username, Users.uid)
+    for d in usernames_dict_list:
         user2id[d.username] = d.uid
         uid2name[d.uid] = d.username
+    global roles_dict_list
+    roles_dict_list = list(Role.select().dicts())
 
 @app.before_request
 def _db_connect():
@@ -48,7 +53,10 @@ def _db_close(exc):
 
 @app.route('/', methods=["GET", "POST"])
 def index():
-    return render_template('index.html')
+    return render_template('index.html',
+        usernames=usernames_dict_list,
+        roles=roles_dict_list,
+        )
 
 
 @app.route('/roles')

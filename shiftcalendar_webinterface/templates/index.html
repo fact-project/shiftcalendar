@@ -3,12 +3,18 @@
 {% block content %}
   <div id='calendar'></div>
 
-  <select id="username">
+  <select name="username" width="300px">
     <option>Please choose a username</option>
+    {% for u in usernames %}
+      <option value="{{ u['uid'] }}"> {{ u['username'] }} </option>
+    {% endfor %}
   </select>
 
   <select id="role">
     <option>Please choose a role</option>
+      {% for r in roles %}
+        <option value="{{ r['id'] }}"> {{ r['name'] }} </option>
+      {% endfor %}
   </select>
 
   comments or remarks:
