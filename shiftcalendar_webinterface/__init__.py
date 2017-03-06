@@ -100,6 +100,16 @@ def delete_event():
     ).execute()
     return redirect('/')
 
+@app.route('/update_events', methods=['POST'])
+@login_required
+def update_events():
+    CalendarEntry.update(
+        start=request.form['start'],
+        end=request.form['end'],
+    ).where(
+        CalendarEntry.id == int(request.form['id'])
+    ).execute()
+    return redirect('/')
 
 @app.route('/login', methods=['GET', 'POST'])
 def login():
