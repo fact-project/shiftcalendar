@@ -3,7 +3,7 @@
 {% block content %}
   <div id='calendar'></div>
 
-  <select name="username" width="300px">
+  <select id="shiftername">
     <option>Please choose a username</option>
     {% for u in usernames %}
       <option value="{{ u['uid'] }}"> {{ u['username'] }} </option>

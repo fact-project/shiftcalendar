@@ -17,7 +17,7 @@ import peewee
 from shiftcalendar.database import connect_databases
 from shiftcalendar.models import Role, CalendarEntry, LegacyCalendarEntry
 from shiftcalendar.logbook_models import Users
-
+from shiftcalendar import start_of_shift, end_of_shift
 
 
 app = Flask(__name__)
@@ -110,6 +110,66 @@ def update_events():
         CalendarEntry.id == int(request.form['id'])
     ).execute()
     return redirect('/')
+
+@app.route('/add_events', methods=['POST'])
+@login_required
+def add_events():
+    user_id = int(request.form['user_id'])
+    role_id = int(request.form['role_id'])
+    start = datetime.strptime(
+        request.form['start'],
+        "%Y-%m-%d %H:%M:%S"
+        )
+    end = datetime.strptime(
+        request.form['end'],
+        "%Y-%m-%d %H:%M:%S"
+        )
+
+    if role_id == 1:  # Starter
+        for day in range((end-start).days):
+            t = start + timedelta(days=day)
+            start_ = start_of_shift(t)
+            end_ = end_of_shift(t) - timedelta(hours=1)
+            CalendarEntry(
+                user_id=user_id,
+                role_id=role_id,
+                start=start_,
+                end=end_
+                ).save()
+    elif role_id == 2:  # Shifter
+        for day in range((end-start).days):
+            t = start + timedelta(days=day)
+            start_ = start_of_shift(t)
+            end_ = end_of_shift(t)
+            CalendarEntry(
+                user_id=user_id,
+                role_id=role_id,
+                start=start_,
+                end=end_
+                ).save()
+    elif role_id == 3:  # Parker
+        for day in range((end-start).days):
+            t = start + timedelta(days=day)
+            start_ = end_of_shift(t) - timedelta(hours=1)
+            end_ = end_of_shift(t)
+            CalendarEntry(
+                user_id=user_id,
+                role_id=role_id,
+                start=start_,
+                end=end_
+                ).save()
+    else:
+        for day in range((end-start).days):
+            t = start + timedelta(days=day)
+            start_ = t
+            end_ = t + timedelta(days=1)
+            CalendarEntry(
+                user_id=user_id,
+                role_id=role_id,
+                start=start_,
+                end=end_
+                ).save()
+
 
 @app.route('/login', methods=['GET', 'POST'])
 def login():
