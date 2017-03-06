@@ -15,6 +15,7 @@
             <a class="navbar-brand" href="/">Home</a>
           </div>
           <div class="collapse navbar-collapse" id="bs-example-navbar-collapse-1">
+            {% if not current_user.is_authenticated %}
             <ul class="nav navbar-nav">
               <li class="disabled"><a href="#">Test Call</a></li>
               <li class="disabled"><a href="#">Test Telegram</a></li>
@@ -27,13 +28,40 @@
               </div>
               <button type="submit" class="btn btn-default">Login</button>
             </form>
+            {% else %}
+            <ul class="nav navbar-nav">
+              <li><a href="/testCall">Test Call</a></li>
+              <li><a href="/testTelegram">Test Telegram</a></li>
+              <li>
+                <form action="/iAmAwake" method="POST" class="navbar-form">
+                  <button class="btn btn-default">
+                    I am awake
+                  </button>
+                </form>
+              </li>
+              <li>
+                <form action="/dummyAlert" method="POST" class="navbar-form">
+                  <button class="btn btn-default">
+                    Place Dummy Alert
+                  </button>
+                </form>
+              </li>
+              <li>
+                <form action="/logout" class="navbar-form">
+                  <button class="btn btn-default">
+                    Logout
+                  </button>
+                </form>
+              </li>
+            </ul>
+            <p class="navbar-text">Logged in as {{current_user.username}}</p>
+            {% endif %}
           </div>
         </div>
       </nav>
-      <h1>FACT ShiftHelper Webinterface</h1>
+      <h1>FACT ShiftCalendar Webinterface</h1>
     </header>
-    <div class="content">
-      {% with messages = get_flashed_messages(with_categories=True) %}
+        {% with messages = get_flashed_messages(with_categories=True) %}
         {% if messages %}
           {% for category, message in messages %}
           <div class="alert {{ category }} alert-dismissible" style="width: 80%; margin-left: 10%;">
@@ -45,6 +73,8 @@
           {% endfor %}
         {% endif %}
       {% endwith %}
+    <div class="content">
+
       {% block content %}
       {% endblock %}
     </div>
