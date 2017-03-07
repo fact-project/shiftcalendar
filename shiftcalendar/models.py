@@ -41,12 +41,18 @@ class CalendarEntry(Model):
     class Meta:
         database = sandbox
 
+class MoonBreak(Model):
+    date = DateField()
+
+    class Meta:
+        database = sandbox
+
 def setup_databases(drop=False):
     '''
     Initiliaze all tables in the databse
     If drop is True, drop all tables before recreating them.
     '''
-    tables = [Role, CalendarEntry]
+    tables = [Role, CalendarEntry, MoonBreak]
     if drop is True:
         print('dropping existing tables')
         sandbox.drop_tables(tables, cascade=True, safe=True)
