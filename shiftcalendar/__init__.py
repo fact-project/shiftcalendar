@@ -104,12 +104,14 @@ def fill_CalendarEntry_from_Legacy():
 
 def fill_MoonBreak_from_Legacy():
 
-    old_entries = sorted(
-        list(LegacyCalendarEntry.select()),
+
+    old_moon_breaks = sorted(
+        list(
+            LegacyCalendarEntry.select()
+                .where(LegacyCalendarEntry.u == 'moon')
+        ),
         key=lambda entry: entry.date
     )
-
-    old_moon_breaks = [e for e in old_entries if e.u=='moon']
     new_entries = [{'date':e.date} for e in old_moon_breaks]
 
     with sandbox.atomic():
