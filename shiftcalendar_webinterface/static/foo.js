@@ -23,17 +23,6 @@ $(document).ready(function() {
       },
     });
 
-    var user_id_choice = "";
-    var role_id_choice = "";
-
-    $("#shiftername").change(function() {
-      user_id_choice = $(this).val();
-    });
-
-    $("#role").change(function() {
-      role_id_choice = $(this).val();
-    });
-
     var calendar = $('#calendar').fullCalendar({
 
     views: {
@@ -71,7 +60,10 @@ $(document).ready(function() {
     },
 
     select: function(start, end) {
+      var role_id_choice = $("#role_select").val();
+      var user_id_choice = $("#username_select").val();
       if (user_id_choice) {
+        alert("before ajax call");
         $.ajax({
               url: '/add_events',
               data: {
